@@ -44,13 +44,16 @@ classdef nifti
                 error('Not enough input arguments.');
             end
             
-            [~, ~, ext] = fileparts(filename);
+            [pathstr, name, ext] = fileparts(filename);
+            if isempty(pathstr)
+                pathstr = '.';
+            end
             if ~strcmpi(ext, '.nii')
                 error('Only uncompressed .nii NIfTI-1 data sets are supported');
             end
-            obj.filename = filename;
+            obj.filename = fullfile(pathstr, [name ext]);
             
-            if exist(filename, 'file') == 2
+            if exist(obj.filename, 'file') == 2
                 obj.writable = false;
                 
                 if rem(nargin-1, 2) ~= 0
@@ -241,11 +244,11 @@ classdef nifti
             
             switch obj.datatype
                 case 'csingle'
-                    obj.mmap = memmapfile(filename, 'Format',  {'single', [2, obj.dim], 'data'}, 'Offset', obj.offset, 'Repeat', 1, 'Writable', obj.writable);
+                    obj.mmap = memmapfile(obj.filename, 'Format',  {'single', [2, obj.dim], 'data'}, 'Offset', obj.offset, 'Repeat', 1, 'Writable', obj.writable);
                 case 'cdouble'
-                    obj.mmap = memmapfile(filename, 'Format',  {'double', [2, obj.dim], 'data'}, 'Offset', obj.offset, 'Repeat', 1, 'Writable', obj.writable);
+                    obj.mmap = memmapfile(obj.filename, 'Format',  {'double', [2, obj.dim], 'data'}, 'Offset', obj.offset, 'Repeat', 1, 'Writable', obj.writable);
                 otherwise
-                    obj.mmap = memmapfile(filename, 'Format',  {obj.datatype, obj.dim, 'data'}, 'Offset', obj.offset, 'Repeat', 1, 'Writable', obj.writable);
+                    obj.mmap = memmapfile(obj.filename, 'Format',  {obj.datatype, obj.dim, 'data'}, 'Offset', obj.offset, 'Repeat', 1, 'Writable', obj.writable);
             end
         end
     end
