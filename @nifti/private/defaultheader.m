@@ -65,7 +65,7 @@ end
 header.toffset = single(0);
 header.glmax = int32(0); % unused
 header.glmin = int32(0); % unused
-descrip = unicode2native('NIfTI – https://ekaden.github.io');
+descrip = unicode2native('NIfTI - https://ekaden.github.io');
 header.descrip = [descrip zeros(1, 80-size(descrip, 2), 'uint8')];
 if nargin < 1
     header.aux_file = zeros(1, 24, 'uint8');
