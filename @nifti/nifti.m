@@ -108,8 +108,8 @@ classdef nifti
                     if obj.writable
                         error('Data scaling is not supported.');
                     else
-                        obj.scaling.slope = obj.header.scl_slope;
-                        obj.scaling.offset = obj.header.scl_inter;
+                        obj.scaling.slope = cast(obj.header.scl_slope, 'double');
+                        obj.scaling.offset = cast(obj.header.scl_inter, 'double');
                     end
                 else
                     obj.scaling.slope = 1;
