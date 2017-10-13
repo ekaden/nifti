@@ -11,11 +11,11 @@ function sref = subsref(obj, s)
 if strcmp(s(1).type, '()') == 1
     if length(s) < 2
         if iscomplex(obj)
-            sref_re = builtin('subsref', obj.mmap.Data.data, struct('type', {s.type}, 'subs', {[{1}, s.subs]}));
-            sref_im = builtin('subsref', obj.mmap.Data.data, struct('type', {s.type}, 'subs', {[{2}, s.subs]}));
+            sref_re = builtin('subsref', obj.mmap, struct('type', {'.', '.', s.type}, 'subs', {'Data', 'data', [{1}, s.subs]}));
+            sref_im = builtin('subsref', obj.mmap, struct('type', {'.', '.', s.type}, 'subs', {'Data', 'data', [{2}, s.subs]}));
             sref = obj.scaling.slope*complex(shiftdim(sref_re, 1), shiftdim(sref_im, 1))+obj.scaling.offset;
         else
-            sref = obj.scaling.slope*builtin('subsref', obj.mmap.Data.data, s)+obj.scaling.offset;
+            sref = obj.scaling.slope*builtin('subsref', obj.mmap, struct('type', {'.', '.', s.type}, 'subs', {'Data', 'data', s.subs}))+obj.scaling.offset;
         end
     else
         error(['No appropriate method, property, or field ' , s(2).subs, ' for class nifti.']);

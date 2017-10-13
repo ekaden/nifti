@@ -12,10 +12,10 @@ function obj = subsasgn(obj, s, val)
 if strcmp(s(1).type, '()') == 1
     if length(s) < 2
         if iscomplex(obj)
-            obj.mmap.Data.data = builtin('subsasgn', obj.mmap.Data.data, struct('type', {s.type}, 'subs', {[{1}, s.subs]}), shiftdim(real(val), -1));
-            obj.mmap.Data.data = builtin('subsasgn', obj.mmap.Data.data, struct('type', {s.type}, 'subs', {[{2}, s.subs]}), shiftdim(imag(val), -1));
+            obj.mmap = builtin('subsasgn', obj.mmap, struct('type', {'.', '.', s.type}, 'subs', {'Data', 'data', [{1}, s.subs]}), shiftdim(real(val), -1));
+            obj.mmap = builtin('subsasgn', obj.mmap, struct('type', {'.', '.', s.type}, 'subs', {'Data', 'data', [{2}, s.subs]}), shiftdim(imag(val), -1));
         else
-            obj.mmap.Data.data = builtin('subsasgn', obj.mmap.Data.data, s, val);
+            obj.mmap = builtin('subsasgn', obj.mmap, struct('type', {'.', '.', s.type}, 'subs', {'Data', 'data', s.subs}), val);
         end
     else
         error(['No appropriate method, property, or field ' , s(2).subs, ' for class nifti.']);
