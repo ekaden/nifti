@@ -226,20 +226,25 @@ classdef nifti
                 if count ~= size(raw, 1)
                     error('Unknown write error.');
                 end
-                if numel(obj.dim) == 1
-                    count = fwrite(fid, zeros(obj.dim(1), 1, obj.datatype), obj.datatype);
-                    if count ~= obj.dim(1)
-                        error('Unknown write error.');
-                    end
+                if isempty(javachk('jvm'))
+                    fclose(fid);
+                    java.io.RandomAccessFile(obj.filename, 'rw').setLength(count+bytesize(obj.datatype)*prod(obj.dim));
                 else
-                    for ii = 1:prod(obj.dim(3:end))
-                        count = fwrite(fid, zeros(obj.dim(1)*obj.dim(2), 1, obj.datatype), obj.datatype);
-                        if count ~= obj.dim(1)*obj.dim(2)
+                    if numel(obj.dim) == 1
+                        count = fwrite(fid, zeros(obj.dim(1), 1, obj.datatype), obj.datatype);
+                        if count ~= obj.dim(1)
                             error('Unknown write error.');
                         end
+                    else
+                        for ii = 1:prod(obj.dim(3:end))
+                            count = fwrite(fid, zeros(obj.dim(1)*obj.dim(2), 1, obj.datatype), obj.datatype);
+                            if count ~= obj.dim(1)*obj.dim(2)
+                                error('Unknown write error.');
+                            end
+                        end
                     end
+                    fclose(fid);
                 end
-                fclose(fid);
             end
             
             switch obj.datatype
