@@ -228,7 +228,8 @@ classdef nifti
                 end
                 if isempty(javachk('jvm'))
                     fclose(fid);
-                    java.io.RandomAccessFile(obj.filename, 'rw').setLength(count+bytesize(obj.datatype)*prod(obj.dim));
+                    d = dir(obj.filename);
+                    java.io.RandomAccessFile(fullfile(d.folder, d.name), 'rw').setLength(count+bytesize(obj.datatype)*prod(obj.dim));
                 else
                     if numel(obj.dim) == 1
                         count = fwrite(fid, zeros(obj.dim(1), 1, obj.datatype), obj.datatype);
