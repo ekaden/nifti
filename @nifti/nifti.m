@@ -1,7 +1,7 @@
 classdef nifti
     %NIFTI Memory-mapped MATLAB input/output for NIfTI-1 data sets.
     %
-    %Copyright (c) 2017 Enrico Kaden & University College London
+    %Copyright (c) 2017-2018 Enrico Kaden & University College London
     
     properties (SetAccess = private)
         filename
@@ -38,7 +38,7 @@ classdef nifti
             %Output argument(s):
             %  obj        ... NIfTI-1 data set
             %
-            %Copyright (c) 2017 Enrico Kaden & University College London
+            %Copyright (c) 2017-2018 Enrico Kaden & University College London
             
             if nargin < 1
                 error('Not enough input arguments.');
@@ -228,8 +228,12 @@ classdef nifti
                 end
                 if isempty(javachk('jvm'))
                     fclose(fid);
-                    d = dir(obj.filename);
-                    java.io.RandomAccessFile(fullfile(d.folder, d.name), 'rw').setLength(count+bytesize(obj.datatype)*prod(obj.dim));
+                    [status, values] = fileattrib(obj.filename);
+                    if status == 1
+                        java.io.RandomAccessFile(values.Name, 'rw').setLength(count+bytesize(obj.datatype)*prod(obj.dim));
+                    else
+                        error('File does not exist.');
+                    end
                 else
                     if numel(obj.dim) == 1
                         count = fwrite(fid, zeros(obj.dim(1), 1, obj.datatype), obj.datatype);
@@ -260,7 +264,7 @@ classdef nifti
     end
 end
 
-% Copyright (c) 2017 Enrico Kaden & University College London
+% Copyright (c) 2017-2018 Enrico Kaden & University College London
 % All rights reserved.
 % 
 % Redistribution and use in source and binary forms, with or without
