@@ -1,12 +1,13 @@
 function header = raw2header(raw)
 %RAW2HEADER
 %
-%Copyright (c) 2017 Enrico Kaden & University College London
+%Copyright (c) 2017-2020 Enrico Kaden & University College London
 
 header = defaultheader();
 
 f = fieldnames(header);
-b = cumsum(struct2array(structfun(@(x) numel(typecast(x, 'uint8')), header, 'UniformOutput', false)));
+c = struct2cell(structfun(@(x) numel(typecast(x, 'uint8')), header, 'UniformOutput', false));
+b = cumsum([c{:}]);
 a = [1, 1+b(1:(end-1))];
 
 for ii = 1:(numel(f)-1)
@@ -17,7 +18,7 @@ if numel(raw) > 348
 end
 end
 
-% Copyright (c) 2017 Enrico Kaden & University College London
+% Copyright (c) 2017-2020 Enrico Kaden & University College London
 % All rights reserved.
 % 
 % Redistribution and use in source and binary forms, with or without

@@ -1,12 +1,13 @@
 function raw = header2raw(header)
 %HEADER2RAW
 %
-%Copyright (c) 2017 Enrico Kaden & University College London
+%Copyright (c) 2017-2020 Enrico Kaden & University College London
 
-raw = horzcat(struct2array(structfun(@(x) typecast(x, 'uint8'), header, 'UniformOutput', false)));
+c = struct2cell(structfun(@(x) typecast(x, 'uint8'), header, 'UniformOutput', false));
+raw = horzcat([c{:}]);
 end
 
-% Copyright (c) 2017 Enrico Kaden & University College London
+% Copyright (c) 2017-2020 Enrico Kaden & University College London
 % All rights reserved.
 % 
 % Redistribution and use in source and binary forms, with or without
